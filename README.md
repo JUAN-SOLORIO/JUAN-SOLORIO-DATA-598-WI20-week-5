@@ -4,7 +4,9 @@ Project for in class participation and practice of creating compedium files.
 
 ## Licenses:
 Code: See DESCRIPTION file.
+
 Data: CC0
+
 Document: CC-BY-4.0
 
 ## Code of Conduct:
