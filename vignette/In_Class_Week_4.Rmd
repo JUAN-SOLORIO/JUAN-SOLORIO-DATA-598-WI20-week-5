@@ -1,0 +1,96 @@
+---
+title: My Rmd document
+author: Juan Solorio
+date: "`r format(Sys.time(),'%d %B, %Y')`"
+bibliography: starwars_citation.bib
+output:
+  tufte::tufte_html: default
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+  tufte::tufte_book:
+    citation_package: natbib
+    latex_engine: xelatex
+link-citations: yes
+---
+```{r starwars-img, echo=FALSE, fig.cap="Starwars Logo"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Star_wars2.svg/1920px-Star_wars2.svg.png")
+```
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  warning = FALSE,
+  fig.path = '../Figures/',
+  fig.width = 8,
+  fig.align = 'center'
+)
+knitr::read_chunk("my-external-code.R")
+
+```
+
+```{r, load-libraries, echo=FALSE, message=FALSE}
+library(tidyverse)
+library(grid)
+library(gridExtra)
+```
+
+```{r, fx-def-chuck, echo=FALSE, cache=TRUE}
+vizual_sct_den <- function(df, varx, vary, varz){
+  par(mfrow = c(1,2))
+  scatter_plot <- ggplot(df, aes(x = {{varx}}, y = {{vary}}, color={{varz}})) + 
+  geom_point()
+  
+
+# Marginal density plot of x (top panel)
+  density_plot <- ggplot(df, aes({{varx}}, fill={{varz}})) + 
+  geom_density(alpha=.5)
+ 
+  return(list(grid.arrange(scatter_plot, density_plot, ncol = 1)))
+  
+}
+```
+
+# Introduction
+This is a test of RMarkdown using the starwars dataset in tidyverse.
+The dataset has `r dim(starwars)[1]` rows and `r dim(starwars)[2]` columns.
+
+# Data Exploration
+Here is are some plots of the data set:
+
+```{r, starwars-plot, fig.cap = "Plots showing Height and Density by Mass of Genders", message=FALSE}
+vizual_sct_den(starwars, mass, height, gender)
+```
+
+Figure \@ref(fig:starwars-plot) shows a scatterplot of Height vs Mass  and a density plot of Mass for colored by Gender for the different characters in the starwars dataset.
+
+Now lets look at a table describing the dataset:
+```{r setup-fx, echo=FALSE}
+<<setup-fx>>
+```
+```{r print-output, echo=FALSE}
+<<print-output>>
+```
+
+Let's take a look at a subset of the dataset for human species:
+```{r starwars-tbl, echo=FALSE}
+starwars %>%
+  filter(species == "Human") %>%
+  select(name, height, mass, homeworld) %>%
+  group_by(homeworld) %>%
+  summarise(Total.Human.Species.Mass = sum(mass)) %>%
+  arrange(desc(Total.Human.Species.Mass)) %>%
+  drop_na() %>%
+  knitr::kable(caption="Table of starwars data for Human species total mass by homeworlds")
+```
+
+Table \@ref(tab:starwars-tbl) shows the subset of the data for the species 'human' from the starwars dataset.
+
+# More Information
+
+There is more analysis in the article "Movienet: A Movie Multilayer Network Model using Visual and Textual Semantic Cues". [@starwars2019statistics].
+
+"It's a Trap: Emperor Palpatine's Poison Pill" is another article with Star Wars analysis of economic repercusions. [@starwars2015econ].
+
+# References cited
+
