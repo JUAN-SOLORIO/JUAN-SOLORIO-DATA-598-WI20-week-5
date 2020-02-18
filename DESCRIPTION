@@ -11,8 +11,11 @@ Depends:
     R (>= 3.6.0)
 Imports:
     dplyr (>= 0.8.3)
-
-Maintainer: The package maintainer <yourself@somewhere.net>
+Suggests: 
+    knitr,
+    rmarkdown,
+    tidyverse
+Maintainer: The package maintainer <JuanSolo@uw.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: What license is it under?
